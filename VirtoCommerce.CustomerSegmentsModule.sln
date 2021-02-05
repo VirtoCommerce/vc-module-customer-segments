@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{14A9244B-B46F-413F-9034-517EC5C4AB08}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E43EE285-4E52-40DE-B958-D2B3EE109A81}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.CustomerSegmentsModule.Tests", "tests\VirtoCommerce.CustomerSegmentsModule.Tests\VirtoCommerce.CustomerSegmentsModule.Tests.csproj", "{BB8EE539-AAB6-46D4-860A-47B9BB07F502}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.CustomerSegmentsModule.Core", "src\VirtoCommerce.CustomerSegmentsModule.Core\VirtoCommerce.CustomerSegmentsModule.Core.csproj", "{FE565744-901A-47D8-B162-65CEB537ECBC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.CustomerSegmentsModule.Data", "src\VirtoCommerce.CustomerSegmentsModule.Data\VirtoCommerce.CustomerSegmentsModule.Data.csproj", "{C3BCBFDE-112A-49D1-A8F2-BB3A0B946518}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.CustomerSegmentsModule.Web", "src\VirtoCommerce.CustomerSegmentsModule.Web\VirtoCommerce.CustomerSegmentsModule.Web.csproj", "{3AAB533F-692A-40B1-A373-86A0A5DEC7F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB8EE539-AAB6-46D4-860A-47B9BB07F502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB8EE539-AAB6-46D4-860A-47B9BB07F502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB8EE539-AAB6-46D4-860A-47B9BB07F502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB8EE539-AAB6-46D4-860A-47B9BB07F502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE565744-901A-47D8-B162-65CEB537ECBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE565744-901A-47D8-B162-65CEB537ECBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE565744-901A-47D8-B162-65CEB537ECBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE565744-901A-47D8-B162-65CEB537ECBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3BCBFDE-112A-49D1-A8F2-BB3A0B946518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3BCBFDE-112A-49D1-A8F2-BB3A0B946518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3BCBFDE-112A-49D1-A8F2-BB3A0B946518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3BCBFDE-112A-49D1-A8F2-BB3A0B946518}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AAB533F-692A-40B1-A373-86A0A5DEC7F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AAB533F-692A-40B1-A373-86A0A5DEC7F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AAB533F-692A-40B1-A373-86A0A5DEC7F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AAB533F-692A-40B1-A373-86A0A5DEC7F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BB8EE539-AAB6-46D4-860A-47B9BB07F502} = {E43EE285-4E52-40DE-B958-D2B3EE109A81}
+		{FE565744-901A-47D8-B162-65CEB537ECBC} = {14A9244B-B46F-413F-9034-517EC5C4AB08}
+		{C3BCBFDE-112A-49D1-A8F2-BB3A0B946518} = {14A9244B-B46F-413F-9034-517EC5C4AB08}
+		{3AAB533F-692A-40B1-A373-86A0A5DEC7F0} = {14A9244B-B46F-413F-9034-517EC5C4AB08}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C2A2637A-670F-4B01-ADF5-807D9EE6691D}
+	EndGlobalSection
+EndGlobal
