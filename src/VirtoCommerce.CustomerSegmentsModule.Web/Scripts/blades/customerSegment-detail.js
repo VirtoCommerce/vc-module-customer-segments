@@ -58,9 +58,9 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 }
 
                 $scope.saveChanges = () => {
-                    customerSegmentsApi.save({}, [blade.currentEntity], (data) => {
+                    customerSegmentsApi.save({}, blade.currentEntity, (data) => {
                         blade.isNew = undefined;
-                        blade.originalEntity = data[0];
+                        blade.originalEntity = data;
                         blade.refresh(true);
                         $scope.closeBlade();
                     });

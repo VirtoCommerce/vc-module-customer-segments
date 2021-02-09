@@ -8,6 +8,7 @@ using VirtoCommerce.CustomerSegmentsModule.Core.Models;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models.Search;
 using VirtoCommerce.CustomerSegmentsModule.Core.Services;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.Platform.Core.Exceptions;
 
 namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
 {
@@ -31,15 +32,22 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         [HttpGet]
         [Route("new")]
         [Authorize(ModuleConstants.Security.Permissions.Create)]
-        public ActionResult<CustomerSegment> GetNewCustomerSegment()
+        public async Task<ActionResult<CustomerSegment>> GetNewCustomerSegment()
         {
-            var result = AbstractTypeFactory<CustomerSegment>.TryCreateInstance();
+            if (await CanAddNewSegment())
+            {
+                var result = AbstractTypeFactory<CustomerSegment>.TryCreateInstance();
 
-            result.ExpressionTree = AbstractTypeFactory<CustomerSegmentTree>.TryCreateInstance();
-            result.ExpressionTree.MergeFromPrototype(AbstractTypeFactory<CustomerSegmentTreePrototype>.TryCreateInstance());
-            result.IsActive = true;
+                result.ExpressionTree = AbstractTypeFactory<CustomerSegmentTree>.TryCreateInstance();
+                result.ExpressionTree.MergeFromPrototype(AbstractTypeFactory<CustomerSegmentTreePrototype>.TryCreateInstance());
+                result.IsActive = true;
 
-            return Ok(result);
+                return Ok(result);
+            }
+            else
+            {
+                throw new PlatformException($"Can't create a new segment, there are already {ModuleConstants.MaxAllowedSegments} segments created.");
+            }
         }
 
         /// <summary>
@@ -65,14 +73,25 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         [HttpPost]
         [Route("")]
         [Authorize(ModuleConstants.Security.Permissions.Update)]
-        public async Task<ActionResult<CustomerSegment[]>> SaveCustomerSegments([FromBody] CustomerSegment[] customerSegments)
+        public async Task<ActionResult<CustomerSegment[]>> SaveCustomerSegments([FromBody] CustomerSegment customerSegment)
         {
-            if (!customerSegments.IsNullOrEmpty())
+            if (customerSegment != null)
             {
-                await _customerSegmentService.SaveChangesAsync(customerSegments);
+                if (customerSegment.IsTransient() && !await CanAddNewSegment())
+                {
+                    throw new PlatformException($"Can't create a new segment, there are already {ModuleConstants.MaxAllowedSegments} segments created.");
+                }
+                else if (customerSegment.IsActive && !await CanSetSegmentActive(customerSegment.Id))
+                {
+                    throw new PlatformException($"Can't set an active segment, there are already {ModuleConstants.MaxActiveSegments} active segments.");
+                }
+                else
+                {
+                    await _customerSegmentService.SaveChangesAsync(new[] { customerSegment });
+                }
             }
 
-            return Ok(customerSegments);
+            return Ok(customerSegment);
         }
 
         /// <summary>
@@ -103,6 +122,31 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
             var result = await _customerSegmentSearchService.SearchCustomerSegmentsAsync(criteria);
 
             return Ok(result);
+        }
+
+
+        private async Task<bool> CanAddNewSegment()
+        {
+            var searchResult = await _customerSegmentSearchService.SearchCustomerSegmentsAsync(new CustomerSegmentSearchCriteria { Skip = 0, Take = 0 });
+            return ModuleConstants.MaxAllowedSegments > searchResult.TotalCount;
+        }
+
+        private async Task<bool> CanSetSegmentActive(string segmentId)
+        {
+            bool result;
+
+            if (!string.IsNullOrEmpty(segmentId))
+            {
+                var segment = (await _customerSegmentService.GetByIdsAsync(new[] { segmentId })).FirstOrDefault();
+                result = segment != null && segment.IsActive;
+            }
+            else
+            {
+                var searchResultActive = await _customerSegmentSearchService.SearchCustomerSegmentsAsync(new CustomerSegmentSearchCriteria { IsActive = true, Skip = 0, Take = 0 });
+                result = ModuleConstants.MaxActiveSegments > searchResultActive.TotalCount;
+            }
+
+            return result;
         }
     }
 }

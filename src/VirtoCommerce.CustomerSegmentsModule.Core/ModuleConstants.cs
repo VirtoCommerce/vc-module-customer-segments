@@ -5,6 +5,9 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core
 {
     public static class ModuleConstants
     {
+        public const int MaxAllowedSegments = 1000;
+        public const int MaxActiveSegments = 20;
+
         public static class Security
         {
             public static class Permissions

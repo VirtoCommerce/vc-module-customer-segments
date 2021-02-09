@@ -3,7 +3,7 @@ angular.module('virtoCommerce.customerSegmentsModule')
         //return $resource('api/demo/customersegments/:id', {}, {
         return $resource('api/customersegments/:id', {}, {
             new: { method: 'GET', url: 'api/customersegments/new' },
-            save: { method: 'POST', isArray: true },
+            save: { method: 'POST' },
             //delete: { method: 'DELETE' },
             search: { method: 'POST', url: 'api/customersegments/search' }
         });
