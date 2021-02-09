@@ -1,13 +1,19 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VirtoCommerce.CoreModule.Core.Conditions;
+using VirtoCommerce.CustomerSegmentsModule.Core;
+using VirtoCommerce.CustomerSegmentsModule.Core.Models;
+using VirtoCommerce.CustomerSegmentsModule.Core.Services;
+using VirtoCommerce.CustomerSegmentsModule.Data.Repositories;
+using VirtoCommerce.CustomerSegmentsModule.Data.Services;
+using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.Modularity;
 using VirtoCommerce.Platform.Core.Security;
 using VirtoCommerce.Platform.Core.Settings;
-using VirtoCommerce.CustomerSegmentsModule.Core;
-using VirtoCommerce.CustomerSegmentsModule.Data.Repositories;
 
 
 namespace VirtoCommerce.CustomerSegmentsModule.Web
@@ -21,11 +27,21 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web
             // database initialization
             var configuration = serviceCollection.BuildServiceProvider().GetRequiredService<IConfiguration>();
             var connectionString = configuration.GetConnectionString("VirtoCommerce.VirtoCommerceCustomerSegmentsModule") ?? configuration.GetConnectionString("VirtoCommerce");
-            serviceCollection.AddDbContext<VirtoCommerceCustomerSegmentsModuleDbContext>(options => options.UseSqlServer(connectionString));
+            serviceCollection.AddDbContext<CustomerSegmentDbContext>(options => options.UseSqlServer(connectionString));
+
+            serviceCollection.AddTransient<ICustomerSegmentRepository, CustomerSegmentRepository>();
+            serviceCollection.AddTransient<Func<ICustomerSegmentRepository>>(provider => () => provider.CreateScope().ServiceProvider.GetRequiredService<ICustomerSegmentRepository>());
+
+            serviceCollection.AddTransient<ICustomerSegmentService, CustomerSegmentService>();
+            serviceCollection.AddTransient<ICustomerSegmentSearchService, CustomerSegmentSearchService>();
+            serviceCollection.AddTransient<IUserGroupEvaluator, UserGroupEvaluator>();
         }
 
         public void PostInitialize(IApplicationBuilder appBuilder)
         {
+            AbstractTypeFactory<IConditionTree>.RegisterType<BlockCustomerSegmentRule>();
+            AbstractTypeFactory<IConditionTree>.RegisterType<ConditionPropertyValues>();
+
             // register settings
             var settingsRegistrar = appBuilder.ApplicationServices.GetRequiredService<ISettingsRegistrar>();
             settingsRegistrar.RegisterSettings(ModuleConstants.Settings.AllSettings, ModuleInfo.Id);
@@ -43,7 +59,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web
             // Ensure that any pending migrations are applied
             using (var serviceScope = appBuilder.ApplicationServices.CreateScope())
             {
-                using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<VirtoCommerceCustomerSegmentsModuleDbContext>())
+                using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<CustomerSegmentDbContext>())
                 {
                     dbContext.Database.EnsureCreated();
                     dbContext.Database.Migrate();
@@ -55,7 +71,5 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web
         {
             // do nothing in here
         }
-
     }
-
 }

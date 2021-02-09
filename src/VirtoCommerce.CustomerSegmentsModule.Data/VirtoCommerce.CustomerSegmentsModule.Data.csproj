@@ -9,20 +9,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Caching\" />
     <Folder Include="ExportImport\" />
     <Folder Include="Handlers\" />
-    <Folder Include="Models\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.0.0" />
+      <PackageReference Include="VirtoCommerce.CustomerModule.Data" Version="3.20.0" />
+      <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.30.0" />
   </ItemGroup>
 
 </Project>
