@@ -25,10 +25,11 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web
         public void Initialize(IServiceCollection serviceCollection)
         {
             // database initialization
-            var configuration = serviceCollection.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            var connectionString = configuration.GetConnectionString("VirtoCommerce.VirtoCommerceCustomerSegmentsModule") ?? configuration.GetConnectionString("VirtoCommerce");
-            serviceCollection.AddDbContext<CustomerSegmentDbContext>(options => options.UseSqlServer(connectionString));
-
+            serviceCollection.AddDbContext<CustomerSegmentDbContext>((provider, options) =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+                options.UseSqlServer(configuration.GetConnectionString(ModuleInfo.Id) ?? configuration.GetConnectionString("VirtoCommerce"));
+            });
             serviceCollection.AddTransient<ICustomerSegmentRepository, CustomerSegmentRepository>();
             serviceCollection.AddTransient<Func<ICustomerSegmentRepository>>(provider => () => provider.CreateScope().ServiceProvider.GetRequiredService<ICustomerSegmentRepository>());
 
@@ -51,7 +52,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web
             permissionsProvider.RegisterPermissions(ModuleConstants.Security.Permissions.AllPermissions.Select(x =>
                 new Permission()
                 {
-                    GroupName = "VirtoCommerceCustomerSegmentsModule",
+                    GroupName = "Customer Segments",
                     ModuleId = ModuleInfo.Id,
                     Name = x
                 }).ToArray());

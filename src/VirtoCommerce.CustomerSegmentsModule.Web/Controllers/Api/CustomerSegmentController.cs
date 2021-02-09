@@ -11,7 +11,7 @@ using VirtoCommerce.Platform.Core.Common;
 
 namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
 {
-    [Route("api/VirtoCommerceCustomerSegmentsModule")]
+    [Route("api/customersegments")]
     public class CustomerSegmentController : Controller
     {
         private readonly ICustomerSegmentService _customerSegmentService;
