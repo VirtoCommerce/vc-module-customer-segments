@@ -8,7 +8,6 @@ using VirtoCommerce.CustomerSegmentsModule.Core.Models;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models.Search;
 using VirtoCommerce.CustomerSegmentsModule.Core.Services;
 using VirtoCommerce.Platform.Core.Common;
-using VirtoCommerce.Platform.Core.Exceptions;
 
 namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
 {
@@ -46,7 +45,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
             }
             else
             {
-                throw new PlatformException($"Can't create a new segment, there are already {ModuleConstants.MaxAllowedSegments} segments created.");
+                return GetAddNewSegmenErrorResult();
             }
         }
 
@@ -79,11 +78,11 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
             {
                 if (customerSegment.IsTransient() && !await CanAddNewSegment())
                 {
-                    throw new PlatformException($"Can't create a new segment, there are already {ModuleConstants.MaxAllowedSegments} segments created.");
+                    return GetAddNewSegmenErrorResult();
                 }
                 else if (customerSegment.IsActive && !await CanSetSegmentActive(customerSegment.Id))
                 {
-                    throw new PlatformException($"Can't set an active segment, there are already {ModuleConstants.MaxActiveSegments} active segments.");
+                    return GetSetIsActiveErrorResult();
                 }
                 else
                 {
@@ -147,6 +146,22 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
             }
 
             return result;
+        }
+
+        private BadRequestObjectResult GetAddNewSegmenErrorResult()
+        {
+            return BadRequest(new
+            {
+                Message = $"Can't create a new segment, there are already {ModuleConstants.MaxAllowedSegments} segments created."
+            });
+        }
+
+        private BadRequestObjectResult GetSetIsActiveErrorResult()
+        {
+            return BadRequest(new
+            {
+                Message = $"Can't set an active segment, there are already {ModuleConstants.MaxActiveSegments} active segments."
+            });
         }
     }
 }
