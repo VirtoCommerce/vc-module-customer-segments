@@ -1,6 +1,6 @@
 angular.module('virtoCommerce.customerSegmentsModule')
     .directive('vaTagSelector', ['$q', 'platformWebApp.bladeNavigationService', 'platformWebApp.settings', function ($q, bladeNavigationService, settings) {
-        const defaultPageSize = 5; // 50
+        const defaultPageSize = 50;
         return {
             restrict: 'E',
             require: 'ngModel',
@@ -30,46 +30,21 @@ angular.module('virtoCommerce.customerSegmentsModule')
 
                 $scope.choices = [];
                 $scope.isNoChoices = true;
-                //var lastSearchPhrase = '';
                 var totalCount = 0;
 
                 $scope.fetch = function ($select) {
-                    //loadEntityItems();
                     if (!$scope.disabled) {
                         $scope.fetchNext($select);
                     }
                 };
 
-                //function loadEntityItems() {
-                //    var ids = $scope.context.multiple ? $scope.context.modelValue : [$scope.context.modelValue];
-
-                //    if ($scope.isNoChoices && _.any(ids)) {
-                //        settings.search({
-                //            entityIds: ids,
-                //            take: ids.length,
-                //            responseGroup: 'none'
-                //        }, (data) => {
-                //            joinItems(data.results);
-                //        });
-                //    }
-                //}
-
                 $scope.fetchNext = ($select) => {
                     $select.page = $select.page || 0;
-
-                    //if (lastSearchPhrase !== $select.search && totalCount > $scope.choices.length) {
-                    //    lastSearchPhrase = $select.search;
-                    //    $select.page = 0;
-                    //}
 
                     if ($select.page === 0 || totalCount > $scope.choices.length) {
                         return settings.getValues(
                             {
                                 id: 'Customer.MemberGroups'
-                                //searchPhrase: $select.search,
-                                //take: pageSize,
-                                //skip: $select.page * pageSize,
-                                //responseGroup: 'none'
                             }, (data) => {
                                 joinItems(data);
                                 $select.page++;
