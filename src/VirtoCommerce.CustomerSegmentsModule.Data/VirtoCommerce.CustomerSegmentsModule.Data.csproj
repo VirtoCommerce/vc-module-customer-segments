@@ -11,6 +11,7 @@
   <ItemGroup>
     <Folder Include="ExportImport\" />
     <Folder Include="Handlers\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

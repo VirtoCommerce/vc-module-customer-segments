@@ -22,7 +22,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Migrations
                     IsActive = table.Column<bool>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: true),
                     EndDate = table.Column<DateTime>(nullable: true),
-                    ExpressionTreeSerialized = table.Column<string>(nullable: true)
+                    SerializedExpressionTree = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

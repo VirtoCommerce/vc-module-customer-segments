@@ -8,6 +8,7 @@ using VirtoCommerce.CustomerSegmentsModule.Core.Models;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models.Search;
 using VirtoCommerce.CustomerSegmentsModule.Core.Services;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.Platform.Core.Settings;
 
 namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
 {
@@ -17,11 +18,18 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         private readonly ICustomerSegmentService _customerSegmentService;
         private readonly ICustomerSegmentSearchService _customerSegmentSearchService;
 
+        public readonly int _maxAllowedSegments;
+        public readonly int _maxActiveSegments;
+
         public CustomerSegmentController(ICustomerSegmentService customerSegmentService,
-            ICustomerSegmentSearchService customerSegmentSearchService)
+            ICustomerSegmentSearchService customerSegmentSearchService,
+            ISettingsManager settingsManager)
         {
             _customerSegmentService = customerSegmentService;
             _customerSegmentSearchService = customerSegmentSearchService;
+
+            _maxAllowedSegments = settingsManager.GetValue(ModuleConstants.Settings.General.MaxAllowedSegments.Name, 1000);
+            _maxActiveSegments = settingsManager.GetValue(ModuleConstants.Settings.General.MaxActiveSegments.Name, 20);
         }
 
         /// <summary>
@@ -84,10 +92,8 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
                 {
                     return GetSetIsActiveErrorResult();
                 }
-                else
-                {
-                    await _customerSegmentService.SaveChangesAsync(new[] { customerSegment });
-                }
+
+                await _customerSegmentService.SaveChangesAsync(new[] { customerSegment });
             }
 
             return Ok(customerSegment);
@@ -127,7 +133,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         private async Task<bool> CanAddNewSegment()
         {
             var searchResult = await _customerSegmentSearchService.SearchCustomerSegmentsAsync(new CustomerSegmentSearchCriteria { Skip = 0, Take = 0 });
-            return ModuleConstants.MaxAllowedSegments > searchResult.TotalCount;
+            return _maxAllowedSegments > searchResult.TotalCount;
         }
 
         private async Task<bool> CanSetSegmentActive(string segmentId)
@@ -142,7 +148,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
             else
             {
                 var searchResultActive = await _customerSegmentSearchService.SearchCustomerSegmentsAsync(new CustomerSegmentSearchCriteria { IsActive = true, Skip = 0, Take = 0 });
-                result = ModuleConstants.MaxActiveSegments > searchResultActive.TotalCount;
+                result = _maxActiveSegments > searchResultActive.TotalCount;
             }
 
             return result;
@@ -152,7 +158,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         {
             return BadRequest(new
             {
-                Message = $"Can't create a new segment, there are already {ModuleConstants.MaxAllowedSegments} segments created."
+                Message = $"Can't create a new segment, there are already {_maxActiveSegments} segments created."
             });
         }
 
@@ -160,7 +166,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         {
             return BadRequest(new
             {
-                Message = $"Can't set an active segment, there are already {ModuleConstants.MaxActiveSegments} active segments."
+                Message = $"Can't set an active segment, there are already {_maxAllowedSegments} active segments."
             });
         }
     }

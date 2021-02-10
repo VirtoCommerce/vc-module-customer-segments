@@ -13,24 +13,29 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 
         public virtual bool CustomerHasPropertyValues(IEnumerable<DynamicObjectProperty> properties)
         {
-            var result = properties.All(property =>
+            var result = false;
+
+            if (!properties.IsNullOrEmpty())
             {
-                var hasPropertyValues = false;
-                var dynamicProperty = Customer.DynamicProperties
-                    .FirstOrDefault(dp => dp.Name.EqualsInvariant(property.Name));
-                var propertyValues = property.Values.Where(v => v.Value != null).ToArray();
-
-                if (dynamicProperty != null && !propertyValues.IsNullOrEmpty())
+                result = properties.All(property =>
                 {
-                    var dynamicPropertyValues = dynamicProperty.Values.Where(v => v.Value != null).ToArray();
-                    hasPropertyValues = propertyValues.Aggregate(false, (current, propertyValue) =>
-                        current || dynamicPropertyValues.Any(dpv =>
-                            dpv.Locale.EqualsInvariant(propertyValue.Locale) &&
-                            dpv.Value.ToString().EqualsInvariant(propertyValue.Value.ToString())));
-                }
+                    var hasPropertyValues = false;
+                    var dynamicProperty = Customer.DynamicProperties
+                        .FirstOrDefault(dp => dp.Name.EqualsInvariant(property.Name));
+                    var propertyValues = property.Values.Where(v => v.Value != null).ToArray();
 
-                return hasPropertyValues;
-            });
+                    if (dynamicProperty != null && !propertyValues.IsNullOrEmpty())
+                    {
+                        var dynamicPropertyValues = dynamicProperty.Values.Where(v => v.Value != null).ToArray();
+                        hasPropertyValues = propertyValues.Aggregate(false, (current, propertyValue) =>
+                            current || dynamicPropertyValues.Any(dpv =>
+                                dpv.Locale.EqualsInvariant(propertyValue.Locale) &&
+                                dpv.Value.ToString().EqualsInvariant(propertyValue.Value.ToString())));
+                    }
+
+                    return hasPropertyValues;
+                });
+            }
 
             return result;
         }

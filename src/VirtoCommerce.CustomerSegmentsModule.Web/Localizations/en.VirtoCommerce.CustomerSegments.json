@@ -88,14 +88,16 @@
     "customerSegments:delete": "Delete Customer Segments related data"
   },
   "settings": {
-    "VirtoCommerceCustomerSegmentsModule": {
-      "VirtoCommerceCustomerSegmentsModulePassword": {
-        "title": "VirtoCommerceCustomerSegmentsModule Password",
-        "description": "VirtoCommerceCustomerSegmentsModule Password setting"
-      },
-      "VirtoCommerceCustomerSegmentsModuleEnabled": {
-        "title": "VirtoCommerceCustomerSegmentsModule Enabled",
-        "description": "VirtoCommerceCustomerSegmentsModule Enabled setting"
+    "CustomerSegments": {
+      "General": {
+        "MaxAllowedSegments": {
+          "title": "Allowed segments",
+          "description": "Max number of segments in the system"
+        },
+        "MaxActiveSegments": {
+          "title": "Allowed active segments",
+          "description": "Max number of simultaneously active segments"
+        }
       }
     }
   }

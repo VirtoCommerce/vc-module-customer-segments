@@ -10,7 +10,7 @@ using VirtoCommerce.CustomerSegmentsModule.Data.Repositories;
 namespace VirtoCommerce.CustomerSegmentsModule.Data.Migrations
 {
     [DbContext(typeof(CustomerSegmentDbContext))]
-    [Migration("20210209093716_InitialCustomerSegment")]
+    [Migration("20210210105756_InitialCustomerSegment")]
     partial class InitialCustomerSegment
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,6 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ExpressionTreeSerialized")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -59,6 +56,9 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
+
+                    b.Property<string>("SerializedExpressionTree")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");

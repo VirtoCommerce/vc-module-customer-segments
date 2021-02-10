@@ -25,7 +25,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Models
 
         public DateTime? EndDate { get; set; }
 
-        public string ExpressionTreeSerialized { get; set; }
+        public string SerializedExpressionTree { get; set; }
 
         public virtual CustomerSegment ToModel(CustomerSegment customerSegment)
         {
@@ -48,9 +48,9 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Models
             customerSegment.EndDate = EndDate;
 
             customerSegment.ExpressionTree = AbstractTypeFactory<CustomerSegmentTree>.TryCreateInstance();
-            if (ExpressionTreeSerialized != null)
+            if (SerializedExpressionTree != null)
             {
-                customerSegment.ExpressionTree = JsonConvert.DeserializeObject<CustomerSegmentTree>(ExpressionTreeSerialized, new CustomerSegmentConditionJsonConverter());
+                customerSegment.ExpressionTree = JsonConvert.DeserializeObject<CustomerSegmentTree>(SerializedExpressionTree, new CustomerSegmentConditionJsonConverter());
             }
 
             return customerSegment;
@@ -80,7 +80,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Models
 
             if (customerSegment.ExpressionTree != null)
             {
-                ExpressionTreeSerialized = JsonConvert.SerializeObject(customerSegment.ExpressionTree, new CustomerSegmentConditionJsonConverter(doNotSerializeAvailCondition: true));
+                SerializedExpressionTree = JsonConvert.SerializeObject(customerSegment.ExpressionTree, new CustomerSegmentConditionJsonConverter(doNotSerializeAvailCondition: true));
             }
 
             return this;
@@ -99,7 +99,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Models
             target.IsActive = IsActive;
             target.StartDate = StartDate;
             target.EndDate = EndDate;
-            target.ExpressionTreeSerialized = ExpressionTreeSerialized;
+            target.SerializedExpressionTree = SerializedExpressionTree;
         }
     }
 }
