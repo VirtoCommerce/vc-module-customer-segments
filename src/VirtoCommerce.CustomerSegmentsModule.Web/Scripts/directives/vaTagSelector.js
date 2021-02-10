@@ -30,7 +30,7 @@ angular.module('virtoCommerce.customerSegmentsModule')
 
                 $scope.choices = [];
                 $scope.isNoChoices = true;
-                var lastSearchPhrase = '';
+                //var lastSearchPhrase = '';
                 var totalCount = 0;
 
                 $scope.fetch = function ($select) {
