@@ -26,7 +26,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core
                 public static SettingDescriptor MaxAllowedSegments { get; } = new SettingDescriptor
                 {
                     Name = "CustomerSegments.General.MaxAllowedSegments",
-                    GroupName = "CustomerSegments|General",
+                    GroupName = "Customer Segments|General",
                     ValueType = SettingValueType.Integer,
                     DefaultValue = 1000
                 };
@@ -34,7 +34,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core
                 public static SettingDescriptor MaxActiveSegments { get; } = new SettingDescriptor
                 {
                     Name = "CustomerSegments.General.MaxActiveSegments",
-                    GroupName = "CustomerSegments|General",
+                    GroupName = "Customer Segments|General",
                     ValueType = SettingValueType.Integer,
                     DefaultValue = 20
                 };

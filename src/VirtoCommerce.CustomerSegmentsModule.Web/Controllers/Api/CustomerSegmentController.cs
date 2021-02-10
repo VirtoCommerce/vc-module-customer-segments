@@ -156,7 +156,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         {
             return BadRequest(new
             {
-                Message = $"Can't create a new segment, there are already {_maxActiveSegments} segments created."
+                Message = $"Can't create a new segment, there are {_maxAllowedSegments} segments created already."
             });
         }
 
@@ -164,7 +164,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         {
             return BadRequest(new
             {
-                Message = $"Can't set an active segment, there are already {_maxAllowedSegments} active segments."
+                Message = $"Can't activate segment, there are {_maxActiveSegments} active segments already."
             });
         }
     }
