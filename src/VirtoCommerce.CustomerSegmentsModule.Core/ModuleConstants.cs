@@ -23,28 +23,28 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core
         {
             public static class General
             {
-                public static SettingDescriptor VirtoCommerceCustomerSegmentsModuleEnabled { get; } = new SettingDescriptor
+                public static SettingDescriptor MaxAllowedSegments { get; } = new SettingDescriptor
                 {
-                    Name = "VirtoCommerceCustomerSegmentsModule.VirtoCommerceCustomerSegmentsModuleEnabled",
-                    GroupName = "VirtoCommerceCustomerSegmentsModule|General",
-                    ValueType = SettingValueType.Boolean,
-                    DefaultValue = false
+                    Name = "CustomerSegments.General.MaxAllowedSegments",
+                    GroupName = "Customer Segments|General",
+                    ValueType = SettingValueType.Integer,
+                    DefaultValue = 1000
                 };
 
-                //public static SettingDescriptor VirtoCommerceCustomerSegmentsModulePassword { get; } = new SettingDescriptor
-                //{
-                //    Name = "VirtoCommerceCustomerSegmentsModule.VirtoCommerceCustomerSegmentsModulePassword",
-                //    GroupName = "VirtoCommerceCustomerSegmentsModule|Advanced",
-                //    ValueType = SettingValueType.SecureString,
-                //    DefaultValue = "qwerty"
-                //};
+                public static SettingDescriptor MaxActiveSegments { get; } = new SettingDescriptor
+                {
+                    Name = "CustomerSegments.General.MaxActiveSegments",
+                    GroupName = "Customer Segments|General",
+                    ValueType = SettingValueType.Integer,
+                    DefaultValue = 20
+                };
 
                 public static IEnumerable<SettingDescriptor> AllSettings
                 {
                     get
                     {
-                        yield return VirtoCommerceCustomerSegmentsModuleEnabled;
-                        //yield return VirtoCommerceCustomerSegmentsModulePassword;
+                        yield return MaxAllowedSegments;
+                        yield return MaxActiveSegments;
                     }
                 }
             }
