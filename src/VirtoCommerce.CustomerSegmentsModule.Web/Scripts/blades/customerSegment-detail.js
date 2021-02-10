@@ -14,6 +14,10 @@ angular.module('virtoCommerce.customerSegmentsModule')
                                 blade.originalEntity = data;
                                 blade.currentEntity = angular.copy(blade.originalEntity);
                                 blade.isLoading = false;
+                            }, err => {
+                                $scope.bladeClose();
+                                bladeNavigationService.setError(err, blade.parentBlade);
+                                blade.parentBlade.$scope.showErrorDetails();
                             });
                     } else {
                         blade.currentEntity = angular.copy(blade.originalEntity);
@@ -63,6 +67,8 @@ angular.module('virtoCommerce.customerSegmentsModule')
                         blade.originalEntity = data;
                         blade.refresh(true);
                         $scope.closeBlade();
+                    }, () => {
+                        $scope.showErrorDetails();
                     });
                 };
 
