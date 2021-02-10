@@ -51,10 +51,8 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
 
                 return Ok(result);
             }
-            else
-            {
-                return GetAddNewSegmenErrorResult();
-            }
+
+            return GetAddNewSegmenErrorResult();
         }
 
         /// <summary>
