@@ -16,11 +16,11 @@
                     useExternalSorting: true,
                     data: 'customers',
                     rowTemplate: 'customerSegment-preview.row.html',
-                    rowHeight: 61,
+                    rowHeight: 45,
                     columnDefs: [
                                 {
-                                  name: 'memberType', displayName: 'customerSegments.blades.customer-segment-preview.labels.type',
-                                  enableColumnResizing: false, width: 60, cellTemplate: 'customerSegment-preview-icon.cell.html', sort: { direction: uiGridConstants.DESC }
+                                  name: 'memberType', displayName: '',
+                                  enableColumnResizing: false, width: 60, cellTemplate: 'customerSegment-preview-icon.cell.html', enableSorting: false
                                 },
                                 { name: 'name', displayName: 'customerSegments.blades.customer-segment-preview.labels.name', sort: { direction: uiGridConstants.ASC } }
                         ]})">
@@ -38,7 +38,7 @@
 <script type="text/ng-template" id="customerSegment-preview-icon.cell.html">
     <div class="ui-grid-cell-contents">
         <div class="product-img" ng-attr-title="{{COL_FIELD}}">
-            <i class="table-ico fa" ng-class="row.entity._memberTypeIcon ? row.entity._memberTypeIcon : 'fa-user'"></i>
+            <i class="table-ico far fa-user"></i>
         </div>
     </div>
 </script>
