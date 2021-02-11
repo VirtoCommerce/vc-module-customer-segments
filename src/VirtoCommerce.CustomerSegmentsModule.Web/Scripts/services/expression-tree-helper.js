@@ -18,18 +18,16 @@ angular.module('virtoCommerce.customerSegmentsModule')
 
                     const childen = customerSegmentRuleBlock.children[0];
                     for (const propertyName in childen) {
-                        var modelProperty = _.find(customerSegment.customerModelProperties, (property) => { return property.name === propertyName; });
+                        var modelProperty = _.findWhere(customerSegment.customerModelProperties, { name: propertyName });
                         if (modelProperty) {
-                            //modelProperty = angular.copy(modelProperty);
-
                             if (modelProperty.isArray) {
-
+                                modelProperty.values = childen[propertyName];
                             }
                             else {
-                                modelProperty.values = [{ value: childen[propertyName] }]
+                                modelProperty.values = [{ value: childen[propertyName] }];
                             }
 
-                            if (!_.some(result, (property) => {
+                            if (_.some(modelProperty.values) && !_.some(result, (property) => {
                                 return property.name === modelProperty.name;
                             })) {
                                 result.push(modelProperty);
@@ -50,7 +48,7 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 _.each(conditionPropertyValues.properties, (property) => {
                     if (property.isModelProperty) {
                         if (property.isArray) {
-
+                            conditionPropertyValues[property.name] = property.values;
                         }
                         else {
                             if (property.values && property.values.length) {

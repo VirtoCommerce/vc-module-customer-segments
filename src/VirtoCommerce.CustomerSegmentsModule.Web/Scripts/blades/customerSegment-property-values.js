@@ -12,7 +12,6 @@ angular.module('virtoCommerce.customerSegmentsModule')
                         id: 'customerSegmentsPreview',
                         controller: 'virtoCommerce.customerSegmentsModule.customerSegmentsPreview',
                         template: 'Modules/$(VirtoCommerce.CustomerSegments)/Scripts/blades/customerSegments-preview.tpl.html',
-                        originalEntity: blade.currentEntity,
                         properties: blade.setProperties
                     };
                     bladeNavigationService.showBlade(previewBlade, currentBlade);
@@ -42,7 +41,7 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 formScope.$valid &&
                 _.every(blade.setProperties,
                     property => property.values.length &&
-                    _.every(property.values, value => typeof value.value !== 'undefined' && value.value !== null));
+                        _.every(property.values, value => (typeof value === 'string') || typeof value.value !== 'undefined' && value.value !== null));
         }
 
         $scope.cancelChanges = () => {
