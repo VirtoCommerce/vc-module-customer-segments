@@ -86,7 +86,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
                 {
                     return GetAddNewSegmenErrorResult();
                 }
-                else if (customerSegment.IsActive && !await CanSetSegmentActive(customerSegment.Id))
+                else if (customerSegment.IsActive && !await CanSetSegmentActive())
                 {
                     return GetSetIsActiveErrorResult();
                 }
@@ -134,22 +134,10 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
             return _maxAllowedSegments > searchResult.TotalCount;
         }
 
-        private async Task<bool> CanSetSegmentActive(string segmentId)
+        private async Task<bool> CanSetSegmentActive()
         {
-            bool result;
-
-            if (!string.IsNullOrEmpty(segmentId))
-            {
-                var segment = (await _customerSegmentService.GetByIdsAsync(new[] { segmentId })).FirstOrDefault();
-                result = segment != null && segment.IsActive;
-            }
-            else
-            {
-                var searchResultActive = await _customerSegmentSearchService.SearchCustomerSegmentsAsync(new CustomerSegmentSearchCriteria { IsActive = true, Skip = 0, Take = 0 });
-                result = _maxActiveSegments > searchResultActive.TotalCount;
-            }
-
-            return result;
+            var searchResultActive = await _customerSegmentSearchService.SearchCustomerSegmentsAsync(new CustomerSegmentSearchCriteria { IsActive = true, Skip = 0, Take = 0 });
+            return _maxActiveSegments > searchResultActive.TotalCount;
         }
 
         private BadRequestObjectResult GetAddNewSegmenErrorResult()
