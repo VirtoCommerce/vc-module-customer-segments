@@ -1,8 +1,0 @@
-<div ng-controller="virtoCommerce.customerSegmentsModule.organizationsController">
-    <ui-select multiple ng-model="blade.currentEntity.organizations">
-        <ui-select-match placeholder="{{'customer.blades.contact-detail.placeholders.organizations' | translate}}">{{$item.name}}</ui-select-match>
-        <ui-select-choices repeat="x.id as x in customerOrganizations" refresh="fetchCustomerOrganizations($select)" when-scrolled="fetchNextCustomerOrganizations($select)">
-            <span ng-bind-html="x.name | highlight: $select.search"></span>
-        </ui-select-choices>
-    </ui-select>
-</div>
