@@ -11,7 +11,84 @@ angular.module('virtoCommerce.customerSegmentsModule')
 
         var properties = [];
 
+        var customerModelProperties = [
+            {
+                name: "salutation",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "fullName",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "firstName",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "middleName",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "lastName",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "birthDate",
+                valueType: 'DateTime',
+                title: ''
+            },
+            {
+                name: "defaultLanguage",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "timeZone",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "taxPayerId",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "preferredDelivery",
+                valueType: 'ShortText',
+                title: ''
+            },
+            {
+                name: "preferredCommunication",
+                valueType: 'ShortText',
+                title: ''
+            }
+            //,
+            //{
+            //    name: "organizations",
+            //    templateUrl: 'Modules/$(VirtoCommerce.CustomerSegments)/Scripts/components/organizations-selector.html',
+            //    isArray: true,
+            //    title: ''
+            //}
+            //,
+            //{
+            //    name: "associatedOrganizations",
+            //    templateUrl: 'Modules/$(VirtoCommerce.CustomerSegments)/Scripts/components/organizations-selector.html',
+            //    isArray: true,
+            //    title: ''
+            //},
+        ]
+
         function initializeBlade() {
+            _.each(customerModelProperties, (property) => {
+                property.isModelProperty = true,
+                property.values = [];
+            });
+
             dynamicPropertiesApi.search({
                     "objectType": 'VirtoCommerce.CustomerModule.Core.Model.Contact',
                     "take": 100
@@ -20,15 +97,18 @@ angular.module('virtoCommerce.customerSegmentsModule')
                     _.each(response.results,
                         (property) => {
                             property.isRequired = true;
+                            //property.title = property.name;
                             property.values = property.valueType === 'Boolean' ? [{ value: false }] : [];
                         });
-                    properties = response.results;
-                    blade.propertiesCount = response.totalCount;
+                    
+                    properties = _.union(response.results, customerModelProperties);
+                    blade.propertiesCount = response.totalCount + customerModelProperties.length;
                     blade.isLoading = false;
                 });
 
-            blade.currentEntity = angular.copy(blade.originalEntity);          
+            blade.currentEntity = angular.copy(blade.originalEntity);
 
+            blade.currentEntity.customerModelProperties = customerModelProperties;
             blade.originalProperties = expressionTreeHelper.extractSelectedProperties(blade.currentEntity);
 
             blade.selectedPropertiesCount = blade.originalProperties.length;

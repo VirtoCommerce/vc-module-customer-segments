@@ -11,7 +11,8 @@
                         <label class="form-label" for="">
                             {{property.name}}
                         </label>
-                        <va-generic-value-input ng-model="property" languages="languages" get-dictionary-values="getDictionaryValues"></va-generic-value-input>
+                        <va-generic-value-input ng-model="property" languages="languages" get-dictionary-values="getDictionaryValues" ng-if="!property.templateUrl"></va-generic-value-input>
+                        <ng-include src='property.templateUrl' ng-if="property.templateUrl"></ng-include>
                         <div class="list-descr">{{property.description}}</div>
                     </div>
                 </fieldset>

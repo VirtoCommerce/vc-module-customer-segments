@@ -58,6 +58,8 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 }
 
                 $scope.saveChanges = () => {
+                    expressionTreeHelper.transformResult(blade.currentEntity);
+
                     customerSegmentsApi.save({}, blade.currentEntity, (data) => {
                         blade.isNew = undefined;
                         blade.originalEntity = data;

@@ -21,6 +21,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Services
         public async Task<ICollection<string>> EvaluateUserGroupsAsync(IEvaluationContext context)
         {
             var result = Array.Empty<string>();
+
             if (context is UserGroupEvaluationContext evaluationContext)
             {
                 var customerSegments =

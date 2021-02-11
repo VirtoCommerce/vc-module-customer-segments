@@ -1,8 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VirtoCommerce.CustomerModule.Core.Model;
+using VirtoCommerce.CustomerModule.Core.Services;
 using VirtoCommerce.CustomerSegmentsModule.Core;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models.Search;
@@ -17,16 +21,22 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
     {
         private readonly ICustomerSegmentService _customerSegmentService;
         private readonly ICustomerSegmentSearchService _customerSegmentSearchService;
+        private readonly IMemberService _memberService;
+        private readonly IUserGroupEvaluator _userGroupEvaluator;
 
         public readonly int _maxAllowedSegments;
         public readonly int _maxActiveSegments;
 
         public CustomerSegmentController(ICustomerSegmentService customerSegmentService,
             ICustomerSegmentSearchService customerSegmentSearchService,
-            ISettingsManager settingsManager)
+            ISettingsManager settingsManager,
+            IMemberService memberService,
+            IUserGroupEvaluator userGroupEvaluator)
         {
             _customerSegmentService = customerSegmentService;
             _customerSegmentSearchService = customerSegmentSearchService;
+            _memberService = memberService;
+            _userGroupEvaluator = userGroupEvaluator;
 
             _maxAllowedSegments = settingsManager.GetValue(ModuleConstants.Settings.General.MaxAllowedSegments.Name, 1000);
             _maxActiveSegments = settingsManager.GetValue(ModuleConstants.Settings.General.MaxActiveSegments.Name, 20);
@@ -123,6 +133,26 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         public async Task<ActionResult<CustomerSegmentSearchResult>> SearchCustomerSegments([FromBody] CustomerSegmentSearchCriteria criteria)
         {
             var result = await _customerSegmentSearchService.SearchCustomerSegmentsAsync(criteria);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Evaluates a customer
+        /// </summary>
+        [HttpGet]
+        [Route("evaluate")]
+        public async Task<ActionResult<ICollection<string>>> EvaluateCustomer(string customerId)
+        {
+            ICollection<string> result = Array.Empty<string>();
+
+            var member = await _memberService.GetByIdAsync(customerId, null, typeof(Contact).Name);
+
+            if (member is Contact customer)
+            {
+                var evaluationContext = new UserGroupEvaluationContext { Customer = customer };
+                result = await _userGroupEvaluator.EvaluateUserGroupsAsync(evaluationContext);
+            }
 
             return Ok(result);
         }
