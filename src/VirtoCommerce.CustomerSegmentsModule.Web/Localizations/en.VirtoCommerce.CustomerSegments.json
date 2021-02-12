@@ -48,7 +48,10 @@
       "customer-segment-properties": {
         "title": "Select properties for filtering",
         "all-properties": "All properties",
-        "select-properties": "Select properties in this group"
+        "select-properties": "Select properties in this group",
+        "labels": {
+          "middle-name": "Middle name"
+        }
       },
       "customer-segment-property-values": {
         "title": "Select properties for filtering",

@@ -11,71 +11,72 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 var properties = [];
                 var customerModelProperties = [
                     {
-                        name: "salutation",
+                        name: 'salutation',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.salutation'
                     },
                     {
-                        name: "fullName",
+                        name: 'fullName',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.full-name'
                     },
                     {
-                        name: "firstName",
+                        name: 'firstName',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.first-name'
                     },
                     {
                         name: "middleName",
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customerSegments.blades.customer-segment-properties.labels.middle-name'
                     },
                     {
-                        name: "lastName",
+                        name: 'lastName',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.last-name'
                     },
                     {
-                        name: "birthDate",
+                        name: 'birthDate',
                         valueType: 'DateTime',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.birthday'
                     },
                     {
-                        name: "defaultLanguage",
+                        name: 'defaultLanguage',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.defaultLanguage'
                     },
                     {
-                        name: "timeZone",
+                        name: 'timeZone',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.timezone'
                     },
                     {
-                        name: "taxPayerId",
+                        name: 'taxPayerId',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.taxpayerId'
                     },
                     {
-                        name: "preferredDelivery",
+                        name: 'preferredDelivery',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.preferred-delivery'
                     },
                     {
-                        name: "preferredCommunication",
+                        name: 'preferredCommunication',
                         valueType: 'ShortText',
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.preferred-communication'
                     },
                     {
-                        name: "organizations",
+                        name: 'organizations',
+                        searchableName: 'parentorganizations',
                         templateUrl: 'organizationSelector.html',
                         isArray: true,
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.organizations'
                     },
                     {
-                        name: "associatedOrganizations",
+                        name: 'associatedOrganizations',
                         templateUrl: 'organizationSelector.html',
                         isArray: true,
-                        title: ''
+                        title: 'customer.blades.contact-detail.labels.associated-organizations'
                     }
                 ]
 
@@ -93,7 +94,6 @@ angular.module('virtoCommerce.customerSegmentsModule')
                             _.each(response.results,
                                 (property) => {
                                     property.isRequired = true;
-                                    //property.title = property.name;
                                     property.values = property.valueType === 'Boolean' ? [{ value: false }] : [];
                                 });
 

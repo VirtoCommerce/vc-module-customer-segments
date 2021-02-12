@@ -9,7 +9,7 @@
                     </legend>
                     <div class="form-group list __info" ng-repeat="property in blade.setProperties | orderBy: 'displayOrder'">
                         <label class="form-label" for="">
-                            {{property.name}}
+                            {{ (property.title || property.name) | translate }}
                         </label>
                         <va-generic-value-input ng-model="property" languages="languages" get-dictionary-values="getDictionaryValues" ng-if="!property.templateUrl"></va-generic-value-input>
                         <ng-include src='property.templateUrl' ng-if="property.templateUrl"></ng-include>
