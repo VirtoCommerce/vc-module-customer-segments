@@ -9,9 +9,10 @@
                     </legend>
                     <div class="form-group list __info" ng-repeat="property in blade.setProperties | orderBy: 'displayOrder'">
                         <label class="form-label" for="">
-                            {{property.name}}
+                            {{ (property.title || property.name) | translate }}
                         </label>
-                        <va-generic-value-input ng-model="property" languages="languages" get-dictionary-values="getDictionaryValues"></va-generic-value-input>
+                        <va-generic-value-input ng-model="property" languages="languages" get-dictionary-values="getDictionaryValues" ng-if="!property.templateUrl"></va-generic-value-input>
+                        <ng-include src='property.templateUrl' ng-if="property.templateUrl"></ng-include>
                         <div class="list-descr">{{property.description}}</div>
                     </div>
                 </fieldset>
@@ -19,3 +20,8 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="organizationSelector.html">
+    <va-member-selector multiple ng-model="property.values" member-types="['Organization']"
+                        placeholder="'customer.blades.contact-detail.placeholders.organizations'"></va-member-selector>
+</script>

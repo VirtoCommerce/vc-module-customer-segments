@@ -13,7 +13,7 @@
         "segment-description": "Description",
         "main-parameters": "Main parameters",
         "main-parameters-description": "{{count}} of {{total}} properties filled",
-        "segment-rule": "Segment rules",
+        "segment-rule": "Segment rule",
         "segment-rule-description": "{{count}} customers in the current filter",
         "user-group": "User group",
         "user-group-placeholder": "Select user group",
@@ -48,7 +48,10 @@
       "customer-segment-properties": {
         "title": "Select properties for filtering",
         "all-properties": "All properties",
-        "select-properties": "Select properties in this group"
+        "select-properties": "Select properties in this group",
+        "labels": {
+          "middle-name": "Middle name"
+        }
       },
       "customer-segment-property-values": {
         "title": "Set filter values",
@@ -74,6 +77,10 @@
       }
     },
     "directives": {
+      "member-selector": {
+        "placeholder": "Select...",
+        "loading": "Loading..."
+      },
       "tag-selector": {
         "placeholder": "Select...",
         "loading": "Loading..."

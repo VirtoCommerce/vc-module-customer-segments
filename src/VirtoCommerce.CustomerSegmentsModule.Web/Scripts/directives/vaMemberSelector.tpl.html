@@ -1,0 +1,8 @@
+<div>
+    <ui-select multiple ng-model="context.modelValue" ng-disabled="disabled" ng-class="{disabled: isNoChoices}">
+        <ui-select-match placeholder="{{placeholder || 'customerSegments.directives.member-selector.placeholder' | translate}}">{{isNoChoices ? ('customerSegments.directives.member-selector.loading' | translate) : $item.name}}</ui-select-match>
+        <ui-select-choices repeat="x.id as x in choices" refresh="fetch($select)" when-scrolled="fetchNext($select)">
+            <span ng-bind-html="x.name | highlight: $select.search" ng-show='!isNoChoices'></span>
+        </ui-select-choices>
+    </ui-select>
+</div>

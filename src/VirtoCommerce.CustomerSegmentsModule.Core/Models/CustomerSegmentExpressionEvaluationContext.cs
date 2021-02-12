@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VirtoCommerce.CoreModule.Core.Common;
@@ -11,7 +12,20 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
     {
         public Contact Customer { get; set; }
 
-        public virtual bool CustomerHasPropertyValues(IEnumerable<DynamicObjectProperty> properties)
+        public virtual bool CustomerHasPropertyValues(ConditionPropertyValues conditionPropertyValues)
+        {
+            var result = false;
+
+            if (conditionPropertyValues != null)
+            {
+                result = CustomerHasDynamicPropertyValues(conditionPropertyValues.Properties) &&
+                    CustomerHasModelPropertyValues(conditionPropertyValues);
+            }
+
+            return result;
+        }
+
+        protected virtual bool CustomerHasDynamicPropertyValues(IEnumerable<DynamicObjectProperty> properties)
         {
             var result = false;
 
@@ -35,6 +49,62 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 
                     return hasPropertyValues;
                 });
+            }
+
+            return result;
+        }
+
+        protected virtual bool CustomerHasModelPropertyValues(ConditionPropertyValues propertyValues)
+        {
+            var result =
+                Compare(propertyValues.BirthDate, Customer.BirthDate) &&
+                Compare(propertyValues.DefaultLanguage, Customer.DefaultLanguage) &&
+                Compare(propertyValues.FirstName, Customer.FirstName) &&
+                Compare(propertyValues.LastName, Customer.LastName) &&
+                Compare(propertyValues.MiddleName, Customer.MiddleName) &&
+                Compare(propertyValues.FullName, Customer.FullName) &&
+                Compare(propertyValues.Salutation, Customer.Salutation) &&
+                Compare(propertyValues.TimeZone, Customer.TimeZone) &&
+                Compare(propertyValues.TaxPayerId, Customer.TaxPayerId) &&
+                Compare(propertyValues.PreferredDelivery, Customer.PreferredDelivery) &&
+                Compare(propertyValues.PreferredCommunication, Customer.PreferredCommunication) &&
+                Compare(propertyValues.AssociatedOrganizations, Customer.AssociatedOrganizations) &&
+                Compare(propertyValues.Organizations, Customer.Organizations);
+
+            return result;
+        }
+
+        private bool Compare(string ruleValue, string customerValue)
+        {
+            var result = true;
+
+            if (!string.IsNullOrEmpty(ruleValue))
+            {
+                result = ruleValue.EqualsInvariant(customerValue);
+            }
+
+            return result;
+        }
+
+        private bool Compare(DateTime? ruleValue, DateTime? customerValue)
+        {
+            var result = true;
+
+            if (ruleValue != null)
+            {
+                result = ruleValue == customerValue;
+            }
+
+            return result;
+        }
+
+        private bool Compare(IList<string> ruleValue, IList<string> customerValue)
+        {
+            var result = true;
+
+            if (!ruleValue.IsNullOrEmpty())
+            {
+                result = customerValue?.Any(x => ruleValue.Contains(x)) ?? false;
             }
 
             return result;
