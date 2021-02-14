@@ -6,7 +6,7 @@ using VirtoCommerce.Platform.Core.DynamicProperties;
 
 namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 {
-    public class ConditionPropertyValues : ConditionTree
+    public class CustomerSegmentConditionPropertyValues : ConditionTree
     {
         public string Salutation { get; set; }
         public string FullName { get; set; }

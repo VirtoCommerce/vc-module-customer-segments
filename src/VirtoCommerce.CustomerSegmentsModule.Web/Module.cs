@@ -41,7 +41,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web
         public void PostInitialize(IApplicationBuilder appBuilder)
         {
             AbstractTypeFactory<IConditionTree>.RegisterType<BlockCustomerSegmentRule>();
-            AbstractTypeFactory<IConditionTree>.RegisterType<ConditionPropertyValues>();
+            AbstractTypeFactory<IConditionTree>.RegisterType<CustomerSegmentConditionPropertyValues>();
 
             // register settings
             var settingsRegistrar = appBuilder.ApplicationServices.GetRequiredService<ISettingsRegistrar>();

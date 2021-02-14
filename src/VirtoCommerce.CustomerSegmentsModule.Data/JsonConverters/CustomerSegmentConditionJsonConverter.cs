@@ -22,7 +22,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.JsonConverters
         {
             var result = base.ReadJson(reader, objectType, existingValue, serializer);
 
-            if (result is ConditionPropertyValues conditionPropertyValues)
+            if (result is CustomerSegmentConditionPropertyValues conditionPropertyValues)
             {
                 conditionPropertyValues.Properties = NormalizeDynamicProperties(conditionPropertyValues.Properties);
             }
@@ -32,7 +32,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.JsonConverters
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is ConditionPropertyValues conditionPropertyValues)
+            if (value is CustomerSegmentConditionPropertyValues conditionPropertyValues)
             {
                 conditionPropertyValues.Properties = NormalizeDynamicProperties(conditionPropertyValues.Properties);
             }
