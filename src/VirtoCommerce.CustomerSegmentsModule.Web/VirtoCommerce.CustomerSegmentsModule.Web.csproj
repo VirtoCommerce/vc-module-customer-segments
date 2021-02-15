@@ -8,10 +8,5 @@
   <ItemGroup>
     <ProjectReference Include="..\VirtoCommerce.CustomerSegmentsModule.Data\VirtoCommerce.CustomerSegmentsModule.Data.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="module.manifest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
+    
 </Project>
