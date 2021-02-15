@@ -1,7 +1,7 @@
 angular.module('virtoCommerce.customerSegmentsModule')
     .factory('virtoCommerce.customerSegmentsModule.expressionTreeHelper', function () {
         const expressionTreeBlockCustomerSegmentRuleId = "BlockCustomerSegmentRule";
-        const expressionTreeConditionPropertyValuesId = "ConditionPropertyValues";
+        const expressionTreeConditionPropertyValuesId = "CustomerSegmentConditionPropertyValues";
 
         return {
             extractSelectedProperties: (customerSegment) => {
