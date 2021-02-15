@@ -7,7 +7,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
         public CustomerSegmentTreePrototype()
         {
             var rule = new BlockCustomerSegmentRule()
-                .WithAvailConditions(new ConditionPropertyValues());
+                .WithAvailConditions(new CustomerSegmentConditionPropertyValues());
 
             WithAvailConditions(rule);
             WithChildrens(rule);

@@ -7,20 +7,29 @@ angular.module('virtoCommerce.customerSegmentsModule')
                     searchPhrase.push(keyword);
                 }
 
+                function convertValue(value) {
+                    var result = value;
+
+                    if (value instanceof Date) {
+                        result = value.toISOString();
+                    }
+
+                    return result;
+                }
+
                 if (properties) {
                     properties.forEach(property => {
-                        if (property.name === 'organizations') {
-                            if (_.some(property.values)) {
-                                searchPhrase.push(`"parentorganizations":"${property.values.join('","')}"`);
-                            }
-                        } else if (property.name === 'associatedOrganizations') {
-                            if (_.some(property.values)) {
-                                 searchPhrase.push(`"associatedOrganizations":"${property.values.join('","')}"`);
-                            }
-                        } else {
-                            const values = property.values.map(value => value.value !== undefined && value.value !== null ? value.value.name || value.value : '').join('","');
-                            searchPhrase.push(`"${property.name}":"${values}"`);
+                        let valuesMap = [];
+
+                        if (property.isModelProperty && property.isArray && _.some(property.values)) {
+                            valuesMap = property.values.map(value => convertValue(value));
                         }
+                        else {
+                            valuesMap = property.values.map(value => value.value !== undefined && value.value !== null ? value.value.name || convertValue(value.value) : '');
+                        }
+
+                        const values = valuesMap.join('","');
+                        searchPhrase.push(`"${property.searchableName || property.name}":"${values}"`);
                     });
                 }
 

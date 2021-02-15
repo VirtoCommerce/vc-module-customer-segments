@@ -12,7 +12,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
     {
         public Contact Customer { get; set; }
 
-        public virtual bool CustomerHasPropertyValues(ConditionPropertyValues conditionPropertyValues)
+        public virtual bool CustomerHasPropertyValues(CustomerSegmentConditionPropertyValues conditionPropertyValues)
         {
             var result = false;
 
@@ -54,7 +54,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
             return result;
         }
 
-        protected virtual bool CustomerHasModelPropertyValues(ConditionPropertyValues propertyValues)
+        protected virtual bool CustomerHasModelPropertyValues(CustomerSegmentConditionPropertyValues propertyValues)
         {
             var result =
                 Compare(propertyValues.BirthDate, Customer.BirthDate) &&

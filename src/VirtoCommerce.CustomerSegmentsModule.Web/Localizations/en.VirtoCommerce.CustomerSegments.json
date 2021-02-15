@@ -41,21 +41,24 @@
         "subtitle": "Build a filter for segment rule",
         "select-properties": "Select properties",
         "select-properties-description": "{{count}} of {{total}} selected",
-        "set-value-to-properties": "Set value to selected properties",
+        "set-value-to-properties": "Set values to selected properties",
         "set-value-to-properties-description": "{{count}} customers in the current filter",
         "confirm": "Confirm"
       },
       "customer-segment-properties": {
         "title": "Select properties for filtering",
         "all-properties": "All properties",
-        "select-properties": "Select properties in this group"
+        "select-properties": "Select properties in this group",
+        "labels": {
+          "middle-name": "Middle name"
+        }
       },
       "customer-segment-property-values": {
-        "title": "Select properties for filtering",
+        "title": "Set filter values",
         "customer-properties": "Customer properties:"
       },
       "customer-segment-preview": {
-        "title": "Organization & contacts",
+        "title": "Rule preview: filtered contacts",
         "labels": {
           "type": "Type",
           "name": "Name"
@@ -65,8 +68,8 @@
     "dialogs": {
       "customer-segment-delete": {
         "title": "Delete confirmation",
-        "one-segment-message": "Customer segment \"{{name}}\" will be deleted and the customers of this segment will no longer be receiving the tagged promotions",
-        "many-segments-message": "Customer segments will be deleted and the customers of those segments will no longer be receiving the tagged promotions"
+        "one-segment-message": "Customer segment \"{{name}}\" will be deleted and the customers of this segment will no longer be receiving the tagged promotions.",
+        "many-segments-message": "Selected customer segments will be deleted and the customers of those segments will no longer be receiving the tagged promotions."
       },
       "customer-segment-save": {
         "title": "Save changes",
