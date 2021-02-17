@@ -27,7 +27,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 
         protected virtual bool CustomerHasDynamicPropertyValues(IEnumerable<DynamicObjectProperty> properties)
         {
-            var result = false;
+            var result = true;
 
             if (!properties.IsNullOrEmpty())
             {
