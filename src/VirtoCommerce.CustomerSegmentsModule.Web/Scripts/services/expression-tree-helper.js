@@ -3,7 +3,88 @@ angular.module('virtoCommerce.customerSegmentsModule')
         const expressionTreeBlockCustomerSegmentRuleId = "BlockCustomerSegmentRule";
         const expressionTreeConditionPropertyValuesId = "CustomerSegmentConditionPropertyValues";
 
+        let getCustomerModelProperties = () => {
+            var customerModelProperties = [
+                {
+                    name: 'salutation',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.salutation'
+                },
+                {
+                    name: 'fullName',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.full-name'
+                },
+                {
+                    name: 'firstName',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.first-name'
+                },
+                {
+                    name: "middleName",
+                    valueType: 'ShortText',
+                    title: 'customerSegments.blades.customer-segment-properties.labels.middle-name'
+                },
+                {
+                    name: 'lastName',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.last-name'
+                },
+                {
+                    name: 'birthDate',
+                    valueType: 'DateTime',
+                    title: 'customer.blades.contact-detail.labels.birthday'
+                },
+                {
+                    name: 'defaultLanguage',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.defaultLanguage'
+                },
+                {
+                    name: 'timeZone',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.timezone'
+                },
+                {
+                    name: 'taxPayerId',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.taxpayerId'
+                },
+                {
+                    name: 'preferredDelivery',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.preferred-delivery'
+                },
+                {
+                    name: 'preferredCommunication',
+                    valueType: 'ShortText',
+                    title: 'customer.blades.contact-detail.labels.preferred-communication'
+                },
+                {
+                    name: 'organizations',
+                    searchableName: 'parentorganizations',
+                    templateUrl: 'organizationSelector.html',
+                    isArray: true,
+                    title: 'customer.blades.contact-detail.labels.organizations'
+                },
+                {
+                    name: 'associatedOrganizations',
+                    templateUrl: 'organizationSelector.html',
+                    isArray: true,
+                    title: 'customer.blades.contact-detail.labels.associated-organizations'
+                }
+            ];
+
+            _.each(customerModelProperties, (property) => {
+                property.isModelProperty = true;
+                property.values = [];
+            });
+
+            return customerModelProperties;
+        }
+
         return {
+            getCustomerModelProperties: getCustomerModelProperties,
             extractSelectedProperties: (customerSegment) => {
                 let result = [];
 
@@ -16,9 +97,10 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 if (customerSegmentRuleBlock.children[0]) {
                     result = customerSegmentRuleBlock.children[0].properties;
 
+                    let modelProperties = customerSegment.customerModelProperties || getCustomerModelProperties();
                     const childen = customerSegmentRuleBlock.children[0];
                     for (const propertyName in childen) {
-                        var modelProperty = _.findWhere(customerSegment.customerModelProperties, { name: propertyName });
+                        var modelProperty = _.findWhere(modelProperties, { name: propertyName });
                         if (modelProperty) {
                             if (modelProperty.isArray) {
                                 modelProperty.values = childen[propertyName];
