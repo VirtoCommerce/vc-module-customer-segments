@@ -6,7 +6,7 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 blade.currentEntity = {};
                 blade.customersCount = 0;
 
-                blade.refresh = (parentRefresh) => {
+                blade.refresh = () => {
                     blade.isLoading = true;
                     if (blade.isNew) {
                         customerSegmentsApi.new({},
@@ -24,18 +24,15 @@ angular.module('virtoCommerce.customerSegmentsModule')
                         blade.mainParametersAreSet = true;
                         blade.ruleIsSet = true;
                         refreshCustomersCount();
+                        blade.originalEntity = angular.copy(blade.currentEntity);
                         blade.isLoading = false;
-                    }
-
-                    if (parentRefresh) {
-                        blade.parentBlade.refresh();
                     }
                 }
 
                 function refreshCustomersCount() {
                     const selectedProperties = expressionTreeHelper.extractSelectedProperties(blade.currentEntity);
 
-                    if (selectedProperties && selectedProperties.length > 0) {
+                    if (_.any(selectedProperties)) {
                         customerHelper.getCustomersCount('', selectedProperties).then((x) => blade.customersCount = x);
                     } else {
                         blade.customersCount = 0;
@@ -64,10 +61,9 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 $scope.saveChanges = () => {
                     expressionTreeHelper.transformResult(blade.currentEntity);
 
-                    customerSegmentsApi.save({}, blade.currentEntity, (data) => {
-                        blade.isNew = undefined;
-                        blade.originalEntity = data;
-                        blade.refresh(true);
+                    customerSegmentsApi.save({}, blade.currentEntity, () => {
+                        blade.parentBlade.refresh();
+                        blade.originalEntity = blade.currentEntity;
                         $scope.closeBlade();
                     }, () => {
                         $scope.showErrorDetails();
