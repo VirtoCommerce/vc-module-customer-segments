@@ -1,13 +1,20 @@
 angular.module('virtoCommerce.customerSegmentsModule')
-    .factory('virtoCommerce.customerSegmentsModule.customerHelper', ['$q', 'virtoCommerce.customerSegmentsModule.customerSearchCriteriaBuilder', 'virtoCommerce.customerModule.members',
-        function ($q, customerSearchCriteriaBuilder, membersApi) {
+    .factory('virtoCommerce.customerSegmentsModule.customerHelper', ['$q', 'virtoCommerce.customerSegmentsModule.customerSegmentsApi', 'virtoCommerce.customerSegmentsModule.expressionTreeHelper',
+        function ($q, customerSegments, expressionTreeHelper) {
             return {
-                getCustomersCount: (keyword, properties) => {
+                getCustomersCount: (customerSegment, properties) => {
                     var deferred = $q.defer();
-                    let searchCriteria = customerSearchCriteriaBuilder.build(keyword, properties);
-                    searchCriteria.skip = 0;
-                    searchCriteria.take = 0;
-                    membersApi.search(searchCriteria, searchResult => {
+
+                    expressionTreeHelper.updateExpressionTree(customerSegment, properties);
+                    expressionTreeHelper.transformResult(customerSegment);
+
+                    let request = {
+                        expression: customerSegment.expressionTree,
+                        skip: 0,
+                        take: 0
+                    };
+
+                    customerSegments.preview(request, searchResult => {
                         deferred.resolve(searchResult.totalCount);
                     });
 

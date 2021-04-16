@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.CustomerModule.Core.Model;
+using VirtoCommerce.CustomerModule.Core.Model.Search;
 using VirtoCommerce.CustomerModule.Core.Services;
 using VirtoCommerce.CustomerSegmentsModule.Core;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models;
@@ -22,6 +23,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         private readonly ICustomerSegmentService _customerSegmentService;
         private readonly ICustomerSegmentSearchService _customerSegmentSearchService;
         private readonly IMemberService _memberService;
+        private readonly IMemberSearchService _memberSearchService;
         private readonly IUserGroupEvaluator _userGroupEvaluator;
 
         public readonly int _maxAllowedSegments;
@@ -31,11 +33,13 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
              ICustomerSegmentSearchService customerSegmentSearchService,
              IMemberService memberService,
              IUserGroupEvaluator userGroupEvaluator,
+             IMemberSearchService memberSearchService,
              ISettingsManager settingsManager)
         {
             _customerSegmentService = customerSegmentService;
             _customerSegmentSearchService = customerSegmentSearchService;
             _memberService = memberService;
+            _memberSearchService = memberSearchService;
             _userGroupEvaluator = userGroupEvaluator;
 
             _maxAllowedSegments = settingsManager.GetValue(ModuleConstants.Settings.General.MaxAllowedSegments.Name, 1000);
@@ -142,9 +146,10 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         /// </summary>
         [HttpGet]
         [Route("evaluate")]
-        public async Task<ActionResult<ICollection<string>>> EvaluateCustomer(string customerId)
+        public async Task<ActionResult<ICollection<UserGroupInfo>>> EvaluateCustomer(string customerId)
         {
-            ICollection<string> result = Array.Empty<string>();
+            ICollection<UserGroupInfo> result = Array.Empty<UserGroupInfo>();
+
             var member = await _memberService.GetByIdAsync(customerId, MemberResponseGroup.WithDynamicProperties.ToString(), typeof(Contact).Name);
 
             if (member is Contact customer)
@@ -156,6 +161,20 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("preview")]
+        public async Task<ActionResult<MemberSearchResult>> Preview([FromBody] CustomerSegmentPreviewRequest previewRequest)
+        {
+            var searchCriteriaBuilder = AbstractTypeFactory<MemberSearchCriteraiBuilder>.TryCreateInstance()
+                .WithSearchPhrase(previewRequest.SearchPhrase)
+                .WithPaging(previewRequest.Skip, previewRequest.Take)
+                .WithSort(previewRequest.Sort);
+
+            var searchCriteria = previewRequest.Expression.BuildSearchCriteria(searchCriteriaBuilder);
+            var result = await _memberSearchService.SearchMembersAsync(searchCriteria);
+
+            return Ok(result);
+        }
 
         private async Task<bool> CanAddNewSegment()
         {

@@ -84,7 +84,10 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 };
 
                 function refreshCustomersCount() {
-                    customerHelper.getCustomersCount('', blade.selectedProperties).then((x) => blade.customersCount = x);
+                    var customerSegment = angular.copy(blade.currentEntity);
+                    const selectedProperties = angular.copy(blade.selectedProperties);
+
+                    customerHelper.getCustomersCount(customerSegment, selectedProperties).then((x) => blade.customersCount = x);
                 }
 
                 $scope.canSave = () => {
