@@ -103,7 +103,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
                         propertyName = attribute.SearchableName;
                     }
 
-                    var queryPart = GetSearchQueryPart(property.Name, propertyValues);
+                    var queryPart = GetSearchQueryPart(propertyName, propertyValues);
                     result.Add(queryPart);
                 }
             }
