@@ -95,13 +95,8 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 
                 if (propertyValues.Any())
                 {
-                    var propertyName = property.Name;
                     var attribute = property.GetCustomAttributes<CustomerModelPropertyAttribute>().FirstOrDefault();
-
-                    if (!string.IsNullOrEmpty(attribute?.SearchableName))
-                    {
-                        propertyName = attribute.SearchableName;
-                    }
+                    var propertyName = !string.IsNullOrEmpty(attribute?.SearchableName) ? attribute.SearchableName : property.Name;
 
                     var queryPart = GetSearchQueryPart(propertyName, propertyValues);
                     result.Add(queryPart);
