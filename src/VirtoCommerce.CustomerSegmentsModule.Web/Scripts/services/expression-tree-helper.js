@@ -155,10 +155,15 @@ angular.module('virtoCommerce.customerSegmentsModule')
             updatePropertiesForPreview: (properties) => {
                 _.each(properties, (property) => {
                     if (!property.isModelProperty && property.values && property.values.length) {
-                        var values = _.map(property.values, function(value) {
-                            return {
-                                value: value.value.name,
-                                valueId: value.value.id,
+                        var values = _.map(property.values, function (value) {
+                            if (value.value.name) {
+                                return {
+                                    value: value.value.name,
+                                    valueId: value.value.id,
+                                }
+                            }
+                            else {
+                                return value;
                             }
                         });
                         property.values = values;

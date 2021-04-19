@@ -5,6 +5,7 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 getCustomersCount: (customerSegment, properties) => {
                     var deferred = $q.defer();
 
+                    expressionTreeHelper.updatePropertiesForPreview(properties);
                     expressionTreeHelper.updateExpressionTree(customerSegment, properties);
                     expressionTreeHelper.transformResult(customerSegment);
 

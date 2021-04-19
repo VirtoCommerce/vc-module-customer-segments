@@ -6,11 +6,12 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 {
     public class MemberSearchCriteraiBuilder : IMemberSearchCriteriaBuilder
     {
-        public MembersSearchCriteria Criteria { get; set; }
+        private MembersSearchCriteria Criteria { get; set; }
 
         public MemberSearchCriteraiBuilder()
         {
-            Criteria = CreateDefaultCriteria();
+            Criteria = AbstractTypeFactory<MembersSearchCriteria>.TryCreateInstance();
+            Criteria.MemberType = typeof(Contact).Name;
         }
 
         public MembersSearchCriteria Build()
@@ -38,14 +39,6 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
             Criteria.Sort = sort;
 
             return this;
-        }
-
-        protected virtual MembersSearchCriteria CreateDefaultCriteria()
-        {
-            var criteria = AbstractTypeFactory<MembersSearchCriteria>.TryCreateInstance();
-            criteria.MemberType = typeof(Contact).Name;
-
-            return criteria;
         }
     }
 }

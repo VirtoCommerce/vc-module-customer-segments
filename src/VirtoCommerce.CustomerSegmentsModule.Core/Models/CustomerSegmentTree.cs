@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using VirtoCommerce.CoreModule.Core.Conditions;
 using VirtoCommerce.CustomerModule.Core.Model.Search;
-using VirtoCommerce.Platform.Core.Common;
 
 namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 {
@@ -14,23 +13,23 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 
         public virtual MembersSearchCriteria BuildSearchCriteria(IMemberSearchCriteriaBuilder builder)
         {
-            if (!Children.IsNullOrEmpty())
-            {
-                BuildSearchCriteria(Children, builder);
-            }
+            EvaluateSearchCriteria(Children, builder);
 
             return builder.Build();
         }
 
-        protected virtual void BuildSearchCriteria(IList<IConditionTree> children, IMemberSearchCriteriaBuilder builder)
+        protected virtual void EvaluateSearchCriteria(IList<IConditionTree> children, IMemberSearchCriteriaBuilder builder)
         {
-            foreach (var conditionTree in children)
+            if (children != null)
             {
-                BuildSearchCriteria(conditionTree.Children, builder);
-
-                if (conditionTree is ICanBuildSearchCriteria buildableCondition)
+                foreach (var conditionTree in children)
                 {
-                    _ = buildableCondition.BuildSearchCriteria(builder);
+                    EvaluateSearchCriteria(conditionTree.Children, builder);
+
+                    if (conditionTree is ICanBuildSearchCriteria buildableCondition)
+                    {
+                        _ = buildableCondition.BuildSearchCriteria(builder);
+                    }
                 }
             }
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using VirtoCommerce.CoreModule.Core.Common;
 using VirtoCommerce.CoreModule.Core.Conditions;
 using VirtoCommerce.CustomerModule.Core.Model.Search;
@@ -36,7 +37,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
         [CustomerModelProperty]
         public string PreferredCommunication { get; set; }
 
-        [CustomerModelProperty]
+        [CustomerModelProperty("parentorganizations")]
         public IList<string> Organizations { get; set; } = new List<string>();
         [CustomerModelProperty]
         public IList<string> AssociatedOrganizations { get; set; } = new List<string>();
@@ -61,7 +62,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
             searchPraseParts.AddRange(GetModelPropertiesParts());
 
             // creates a search phrase query like:
-            // "DynamicProperyName1":"DynamicProperyValue" "DynamicProperyName2":"DynamicProperyValue1","DynamicProperyValue2" "ModelPropery1":"ModelProperyValue1"
+            // "DynamicProperyName1":"DynamicProperyValue" "ArrayDynamicProperyName":"DynamicProperyValue1","DynamicProperyValue2" "ModelPropery1":"ModelProperyValue1"
             var searchPhrase = string.Join(' ', searchPraseParts);
 
             builder.WithSearchPhrase(searchPhrase);
@@ -71,18 +72,14 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 
         private IList<string> GetDynamicPropertiesParts()
         {
-            var result = new List<string>();
-
-            foreach (var property in Properties)
-            {
-                if (!property.Values.IsNullOrEmpty())
+            var result = Properties
+                .Where(x => !x.Values.IsNullOrEmpty())
+                .Select(property =>
                 {
-                    var propertyName = QuoteValue(property.Name);
-                    var values = property.Values.Select(x => GetSearchableValue(x.Value)).ToList();
-                    var propertyValues = string.Join(',', values);
-                    result.Add($"{propertyName}:{propertyValues}");
-                }
-            }
+                    var propertyValues = property.Values.Select(x => x.Value);
+                    return GetSearchQueryPart(property.Name, propertyValues);
+                })
+                .ToList();
 
             return result;
         }
@@ -94,73 +91,71 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
             var properties = GetProperties().Where(x => x.IsHaveAttribute(typeof(CustomerModelPropertyAttribute)));
             foreach (var property in properties)
             {
-                var value = property.GetValue(this);
-                if (value == null)
-                {
-                    continue;
-                }
+                var propertyValues = GetPropertyValues(property);
 
-                IList<string> values = new List<string>();
-
-                if (value.GetType().IsAssignableFromGenericList())
+                if (propertyValues.Any())
                 {
-                    foreach (var child in (IList)value)
+                    var propertyName = property.Name;
+                    var attribute = property.GetCustomAttributes<CustomerModelPropertyAttribute>().FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(attribute?.SearchableName))
                     {
-                        values.Add(GetSearchableValue(child));
+                        propertyName = attribute.SearchableName;
                     }
-                }
-                else
-                {
-                    values.Add(GetSearchableValue(value));
-                }
 
-                if (values.Any())
-                {
-                    var propertyName = GetSearchableName(property.Name);
-                    var propertyValues = string.Join(',', values);
-                    result.Add($"{propertyName}:{propertyValues}");
+                    var queryPart = GetSearchQueryPart(property.Name, propertyValues);
+                    result.Add(queryPart);
                 }
             }
 
             return result;
         }
 
-        private string QuoteValue(string value)
+        private IList<object> GetPropertyValues(PropertyInfo property)
         {
-            return $"\"{value}\"";
-        }
+            var result = new List<object>();
+            var value = property.GetValue(this);
 
-        private string GetSearchableName(string propertyName)
-        {
-            var result = propertyName;
-
-            if (propertyName.EqualsInvariant("organizations"))
+            if (value != null)
             {
-                result = "parentorganizations";
+                if (value.GetType().IsAssignableFromGenericList())
+                {
+                    foreach (var child in (IList)value)
+                    {
+                        result.Add(child);
+                    }
+                }
+                else
+                {
+                    result.Add(value);
+                }
             }
 
-            return QuoteValue(result);
+            return result;
+        }
+
+        private string GetSearchQueryPart(string propertyName, IEnumerable<object> propertyValues)
+        {
+            var quotedName = QuoteValue(propertyName);
+            var quotedValues = propertyValues.Select(x => GetSearchableValue(x));
+            var joinedValue = string.Join(',', quotedValues);
+
+            return $"{quotedName}:{joinedValue}";
         }
 
         private string GetSearchableValue(object value)
         {
-            string result;
-
             if (value is DateTime dateTime)
             {
-                result = dateTime.ToString("s");
-            }
-            else
-            {
-                result = value.ToString();
+                return QuoteValue(dateTime.ToString("s"));
             }
 
-            return QuoteValue(result);
+            return QuoteValue(value.ToString());
         }
 
-
-        public class CustomerModelPropertyAttribute : Attribute
+        private string QuoteValue(string value)
         {
+            return $"\"{value}\"";
         }
     }
 }
