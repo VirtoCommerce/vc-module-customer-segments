@@ -40,7 +40,6 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Services
 
                 var staticUserGroups = evaluationContext.Customer.Groups.Select(group => new UserGroupInfo
                 {
-                    IsDynamic = false,
                     UserGroup = group
                 });
 
