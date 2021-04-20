@@ -6,10 +6,10 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
     {
         MembersSearchCriteria Build();
 
-        MemberSearchCriteraiBuilder WithPaging(int skip, int take);
+        MembersSearchCriteriaBuilder WithPaging(int skip, int take);
 
-        MemberSearchCriteraiBuilder WithSearchPhrase(string searchPhrase);
+        MembersSearchCriteriaBuilder WithSearchPhrase(string searchPhrase);
 
-        MemberSearchCriteraiBuilder WithSort(string sort);
+        MembersSearchCriteriaBuilder WithSort(string sort);
     }
 }

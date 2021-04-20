@@ -165,7 +165,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         [Route("preview")]
         public async Task<ActionResult<MemberSearchResult>> Preview([FromBody] CustomerSegmentPreviewRequest previewRequest)
         {
-            var searchCriteriaBuilder = AbstractTypeFactory<MemberSearchCriteraiBuilder>.TryCreateInstance()
+            var searchCriteriaBuilder = AbstractTypeFactory<MembersSearchCriteriaBuilder>.TryCreateInstance()
                 .WithSearchPhrase(previewRequest.SearchPhrase)
                 .WithPaging(previewRequest.Skip, previewRequest.Take)
                 .WithSort(previewRequest.Sort);

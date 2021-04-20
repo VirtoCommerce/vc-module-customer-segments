@@ -4,11 +4,11 @@ using VirtoCommerce.Platform.Core.Common;
 
 namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 {
-    public class MemberSearchCriteraiBuilder : IMemberSearchCriteriaBuilder
+    public class MembersSearchCriteriaBuilder : IMemberSearchCriteriaBuilder
     {
         private MembersSearchCriteria Criteria { get; set; }
 
-        public MemberSearchCriteraiBuilder()
+        public MembersSearchCriteriaBuilder()
         {
             Criteria = AbstractTypeFactory<MembersSearchCriteria>.TryCreateInstance();
             Criteria.MemberType = typeof(Contact).Name;
@@ -19,7 +19,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
             return Criteria;
         }
 
-        public MemberSearchCriteraiBuilder WithPaging(int skip, int take)
+        public MembersSearchCriteriaBuilder WithPaging(int skip, int take)
         {
             Criteria.Skip = skip;
             Criteria.Take = take;
@@ -27,14 +27,14 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
             return this;
         }
 
-        public MemberSearchCriteraiBuilder WithSearchPhrase(string searchPhrase)
+        public MembersSearchCriteriaBuilder WithSearchPhrase(string searchPhrase)
         {
             Criteria.SearchPhrase = $"{Criteria.SearchPhrase} {searchPhrase}".Trim();
 
             return this;
         }
 
-        public MemberSearchCriteraiBuilder WithSort(string sort)
+        public MembersSearchCriteriaBuilder WithSort(string sort)
         {
             Criteria.Sort = sort;
 

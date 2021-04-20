@@ -4,12 +4,12 @@ using Xunit;
 
 namespace VirtoCommerce.CustomerSegmentsModule.Tests
 {
-    public class MemberSearchCriteraiBuilderTests
+    public class MembersSearchCriteriaBuilderTests
     {
         [Fact]
         public void MemberSearchCriteriaBuilder_WithPagingTest()
         {
-            var builder = new MemberSearchCriteraiBuilder();
+            var builder = new MembersSearchCriteriaBuilder();
 
             builder.WithPaging(20, 40);
 
@@ -22,7 +22,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Tests
         [Fact]
         public void MemberSearchCriteriaBuilder_WithSortTest()
         {
-            var builder = new MemberSearchCriteraiBuilder();
+            var builder = new MembersSearchCriteriaBuilder();
 
             builder.WithSort("name:desc");
 
@@ -34,7 +34,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Tests
         [Fact]
         public void MemberSearchCriteriaBuilder_WithSearchPhraseTest()
         {
-            var builder = new MemberSearchCriteraiBuilder();
+            var builder = new MembersSearchCriteriaBuilder();
 
             builder.WithSearchPhrase("test");
             builder.WithSearchPhrase("propertyName:propertyValue");
