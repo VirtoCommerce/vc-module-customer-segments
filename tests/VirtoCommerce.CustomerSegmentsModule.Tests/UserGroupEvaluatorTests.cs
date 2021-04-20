@@ -54,7 +54,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Tests
                 UserGroup = group
             });
 
-            evaluationResult.Should().BeEquivalentTo(expectedResult); ;
+            evaluationResult.Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]
