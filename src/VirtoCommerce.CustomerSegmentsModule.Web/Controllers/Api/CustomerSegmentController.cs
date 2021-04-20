@@ -9,6 +9,7 @@ using VirtoCommerce.CustomerModule.Core.Model;
 using VirtoCommerce.CustomerModule.Core.Model.Search;
 using VirtoCommerce.CustomerModule.Core.Services;
 using VirtoCommerce.CustomerSegmentsModule.Core;
+using VirtoCommerce.CustomerSegmentsModule.Core.Extensions;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models.Search;
 using VirtoCommerce.CustomerSegmentsModule.Core.Services;

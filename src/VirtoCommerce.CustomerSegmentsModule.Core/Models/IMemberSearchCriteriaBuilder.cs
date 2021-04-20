@@ -4,12 +4,8 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 {
     public interface IMemberSearchCriteriaBuilder
     {
+        MembersSearchCriteria Criteria { get; set; }
+
         MembersSearchCriteria Build();
-
-        MembersSearchCriteriaBuilder WithPaging(int skip, int take);
-
-        MembersSearchCriteriaBuilder WithSearchPhrase(string searchPhrase);
-
-        MembersSearchCriteriaBuilder WithSort(string sort);
     }
 }

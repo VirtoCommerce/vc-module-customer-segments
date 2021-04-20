@@ -1,4 +1,5 @@
 using FluentAssertions;
+using VirtoCommerce.CustomerSegmentsModule.Core.Extensions;
 using VirtoCommerce.CustomerSegmentsModule.Core.Models;
 using Xunit;
 
@@ -41,6 +42,24 @@ namespace VirtoCommerce.CustomerSegmentsModule.Tests
 
             var criteria = builder.Build();
 
+            criteria.SearchPhrase.Should().Be("test propertyName:propertyValue");
+        }
+
+        [Fact]
+        public void MemberSearchCriteriaBuilder_WithAllExtentionsTest()
+        {
+            var builder = new MembersSearchCriteriaBuilder();
+
+            builder.WithPaging(20, 40)
+                .WithSort("name:desc")
+                .WithSearchPhrase("test")
+                .WithSearchPhrase("propertyName:propertyValue");
+
+            var criteria = builder.Build();
+
+            criteria.Skip.Should().Be(20);
+            criteria.Take.Should().Be(40);
+            criteria.Sort.Should().Be("name:desc");
             criteria.SearchPhrase.Should().Be("test propertyName:propertyValue");
         }
     }

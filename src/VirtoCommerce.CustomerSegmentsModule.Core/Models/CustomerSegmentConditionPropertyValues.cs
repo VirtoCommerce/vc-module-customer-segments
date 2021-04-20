@@ -6,6 +6,7 @@ using System.Reflection;
 using VirtoCommerce.CoreModule.Core.Common;
 using VirtoCommerce.CoreModule.Core.Conditions;
 using VirtoCommerce.CustomerModule.Core.Model.Search;
+using VirtoCommerce.CustomerSegmentsModule.Core.Extensions;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.DynamicProperties;
 
@@ -13,33 +14,33 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 {
     public class CustomerSegmentConditionPropertyValues : ConditionTree, ICanBuildSearchCriteria
     {
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string Salutation { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string FullName { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string FirstName { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string MiddleName { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string LastName { get; set; }
 
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public DateTime? BirthDate { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string DefaultLanguage { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string TimeZone { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string TaxPayerId { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string PreferredDelivery { get; set; }
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public string PreferredCommunication { get; set; }
 
-        [CustomerModelProperty("parentorganizations")]
+        [SearchableCustomerModelProperty("parentorganizations")]
         public IList<string> Organizations { get; set; } = new List<string>();
-        [CustomerModelProperty]
+        [SearchableCustomerModelProperty]
         public IList<string> AssociatedOrganizations { get; set; } = new List<string>();
 
         public ICollection<DynamicObjectProperty> Properties { get; set; } = new List<DynamicObjectProperty>();
@@ -88,14 +89,14 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
         {
             var result = new List<string>();
 
-            var properties = GetProperties().Where(x => x.IsHaveAttribute(typeof(CustomerModelPropertyAttribute)));
+            var properties = GetProperties().Where(x => x.IsHaveAttribute(typeof(SearchableCustomerModelPropertyAttribute)));
             foreach (var property in properties)
             {
                 var propertyValues = GetPropertyValues(property);
 
                 if (propertyValues.Any())
                 {
-                    var attribute = property.GetCustomAttributes<CustomerModelPropertyAttribute>().FirstOrDefault();
+                    var attribute = property.GetCustomAttributes<SearchableCustomerModelPropertyAttribute>().FirstOrDefault();
                     var propertyName = !string.IsNullOrEmpty(attribute?.SearchableName) ? attribute.SearchableName : property.Name;
 
                     var queryPart = GetSearchQueryPart(propertyName, propertyValues);
