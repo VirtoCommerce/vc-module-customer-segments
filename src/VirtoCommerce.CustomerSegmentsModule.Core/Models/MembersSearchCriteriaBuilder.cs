@@ -11,7 +11,9 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
         public MembersSearchCriteriaBuilder()
         {
             Criteria = AbstractTypeFactory<MembersSearchCriteria>.TryCreateInstance();
+            Criteria.DeepSearch = true;
             Criteria.MemberType = typeof(Contact).Name;
+            Criteria.ResponseGroup = MemberResponseGroup.Default.ToString();
         }
 
         public MembersSearchCriteria Build()
