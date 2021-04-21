@@ -1,9 +1,9 @@
 angular.module('virtoCommerce.customerSegmentsModule')
     .controller('virtoCommerce.customerSegmentsModule.customerSegmentsPreview',
-        ['$scope', 'virtoCommerce.customerModule.members',
+        ['$scope',
             'platformWebApp.bladeUtils', 'platformWebApp.uiGridHelper', 'platformWebApp.ui-grid.extension',
-            'virtoCommerce.customerModule.memberTypesResolverService', 'virtoCommerce.customerSegmentsModule.customerSearchCriteriaBuilder',
-            function ($scope, membersApi, bladeUtils, uiGridHelper, gridOptionExtension, memberTypesResolverService, customerSearchCriteriaBuilder) {
+            'virtoCommerce.customerModule.memberTypesResolverService', 'virtoCommerce.customerSegmentsModule.customerSegmentsApi', 'virtoCommerce.customerSegmentsModule.expressionTreeHelper',
+            function ($scope, bladeUtils, uiGridHelper, gridOptionExtension, memberTypesResolverService, customerSegments, expressionTreeHelper) {
                 $scope.uiGridConstants = uiGridHelper.uiGridConstants;
 
                 var blade = $scope.blade;
@@ -20,8 +20,12 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 blade.refresh = () => {
                     blade.isLoading = true;
 
-                    let searchCriteria = getSearchCriteria();
-                    membersApi.search(searchCriteria, searchResult => {
+                    expressionTreeHelper.updatePropertiesForPreview(blade.properties);
+                    expressionTreeHelper.updateExpressionTree(blade.customerSegment, blade.properties);
+                    expressionTreeHelper.transformResult(blade.customerSegment);
+
+                    var request = getSearchCriteria(blade.customerSegment.expressionTree);
+                    customerSegments.preview(request, function(searchResult) {
                         $scope.pageSettings.totalItems = searchResult.totalCount;
                         let memberTypeDefinition;
                         _.each(searchResult.results, (x) => {
@@ -59,11 +63,14 @@ angular.module('virtoCommerce.customerSegmentsModule')
                     bladeUtils.initializePagination($scope);
                 };
 
-                function getSearchCriteria() {
-                    let searchCriteria = customerSearchCriteriaBuilder.build(filter.keyword, blade.properties);
-                    searchCriteria.sort = uiGridHelper.getSortExpression($scope);
-                    searchCriteria.skip = ($scope.pageSettings.currentPage - 1) * $scope.pageSettings.itemsPerPageCount;
-                    searchCriteria.take = $scope.pageSettings.itemsPerPageCount
+                function getSearchCriteria(expression) {
+                    let searchCriteria = {
+                        searchPhrase: filter.keyword,
+                        expression: expression,
+                        sort: uiGridHelper.getSortExpression($scope),
+                        skip: ($scope.pageSettings.currentPage - 1) * $scope.pageSettings.itemsPerPageCount,
+                        take: $scope.pageSettings.itemsPerPageCount
+                    }
                     return searchCriteria;
                 }
             }]);

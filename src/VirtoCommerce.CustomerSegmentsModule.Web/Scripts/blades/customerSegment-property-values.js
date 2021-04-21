@@ -12,7 +12,8 @@ angular.module('virtoCommerce.customerSegmentsModule')
                         id: 'customerSegmentsPreview',
                         controller: 'virtoCommerce.customerSegmentsModule.customerSegmentsPreview',
                         template: 'Modules/$(VirtoCommerce.CustomerSegments)/Scripts/blades/customerSegments-preview.tpl.html',
-                        properties: blade.setProperties
+                        properties: angular.copy(blade.setProperties),
+                        customerSegment: angular.copy(blade.currentEntity)
                     };
                     bladeNavigationService.showBlade(previewBlade, currentBlade);
                 },

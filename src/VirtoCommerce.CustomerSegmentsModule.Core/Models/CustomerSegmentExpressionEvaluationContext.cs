@@ -54,6 +54,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
             return result;
         }
 
+        // PT-1282 Add reflector for CustomerModelProperty in compare method
         protected virtual bool CustomerHasModelPropertyValues(CustomerSegmentConditionPropertyValues propertyValues)
         {
             var result =

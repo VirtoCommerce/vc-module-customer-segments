@@ -151,6 +151,24 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 if (customerSegmentRuleBlock.children[0]) {
                     customerSegmentRuleBlock.children[0].properties = _.filter(customerSegmentRuleBlock.children[0].properties, (property) => { return !property.isModelProperty; });
                 }
+            },
+            updatePropertiesForPreview: (properties) => {
+                _.each(properties, (property) => {
+                    if (!property.isModelProperty && property.values && property.values.length) {
+                        var values = _.map(property.values, function (value) {
+                            if (value.value.name) {
+                                return {
+                                    value: value.value.name,
+                                    valueId: value.value.id,
+                                }
+                            }
+                            else {
+                                return value;
+                            }
+                        });
+                        property.values = values;
+                    }
+                });
             }
         };
     });

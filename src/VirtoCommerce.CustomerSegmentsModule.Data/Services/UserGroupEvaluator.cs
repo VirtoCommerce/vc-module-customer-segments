@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,9 +18,9 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Services
             _customerSegmentSearchService = customerSegmentSearchService;
         }
 
-        public async Task<ICollection<string>> EvaluateUserGroupsAsync(IEvaluationContext context)
+        public async Task<ICollection<UserGroupInfo>> EvaluateUserGroupsAsync(IEvaluationContext context)
         {
-            var result = Array.Empty<string>();
+            var result = new List<UserGroupInfo>();
 
             if (context is UserGroupEvaluationContext evaluationContext)
             {
@@ -30,15 +29,27 @@ namespace VirtoCommerce.CustomerSegmentsModule.Data.Services
 
                 result = customerSegments
                     .Where(customerSegment => !customerSegment.UserGroup.IsNullOrEmpty() && customerSegment.ExpressionTree.IsSatisfiedBy(new CustomerSegmentExpressionEvaluationContext { Customer = evaluationContext.Customer }))
-                    .Select(customerSegment => customerSegment.UserGroup)
-                    .Distinct()
-                    .ToArray();
+                    .Select(customerSegment => new UserGroupInfo
+                    {
+                        IsDynamic = true,
+                        DynamicRuleId = customerSegment.Id,
+                        DynamicRuleName = customerSegment.Name,
+                        UserGroup = customerSegment.UserGroup
+                    })
+                    .ToList();
+
+                var staticUserGroups = evaluationContext.Customer.Groups.Select(group => new UserGroupInfo
+                {
+                    UserGroup = group
+                });
+
+                result.AddRange(staticUserGroups);
             }
 
             return result;
         }
 
-        public ICollection<string> EvaluateUserGroups(IEvaluationContext context)
+        public ICollection<UserGroupInfo> EvaluateUserGroups(IEvaluationContext context)
         {
             return EvaluateUserGroupsAsync(context).GetAwaiter().GetResult();
         }

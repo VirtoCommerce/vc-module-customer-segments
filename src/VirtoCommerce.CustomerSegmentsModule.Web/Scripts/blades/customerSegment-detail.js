@@ -30,10 +30,11 @@ angular.module('virtoCommerce.customerSegmentsModule')
                 }
 
                 function refreshCustomersCount() {
-                    const selectedProperties = expressionTreeHelper.extractSelectedProperties(blade.currentEntity);
+                    var customerSegment = angular.copy(blade.currentEntity);
+                    const selectedProperties = expressionTreeHelper.extractSelectedProperties(customerSegment);
 
                     if (_.any(selectedProperties)) {
-                        customerHelper.getCustomersCount('', selectedProperties).then((x) => blade.customersCount = x);
+                        customerHelper.getCustomersCount(customerSegment, selectedProperties).then((x) => blade.customersCount = x);
                     } else {
                         blade.customersCount = 0;
                     }
