@@ -151,7 +151,7 @@ namespace VirtoCommerce.CustomerSegmentsModule.Web.Controllers.Api
         {
             ICollection<UserGroupInfo> result = Array.Empty<UserGroupInfo>();
 
-            var member = await _memberService.GetByIdAsync(customerId, MemberResponseGroup.WithDynamicProperties.ToString(), typeof(Contact).Name);
+            var member = await _memberService.GetByIdAsync(customerId, (MemberResponseGroup.WithDynamicProperties | MemberResponseGroup.WithGroups).ToString(), typeof(Contact).Name);
 
             if (member is Contact customer)
             {
