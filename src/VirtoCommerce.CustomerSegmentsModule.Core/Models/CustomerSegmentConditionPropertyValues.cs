@@ -14,33 +14,33 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
 {
     public class CustomerSegmentConditionPropertyValues : ConditionTree, ICanBuildSearchCriteria
     {
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string Salutation { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string FullName { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string FirstName { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string MiddleName { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string LastName { get; set; }
 
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public DateTime? BirthDate { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string DefaultLanguage { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string TimeZone { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string TaxPayerId { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string PreferredDelivery { get; set; }
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public string PreferredCommunication { get; set; }
 
-        [SearchableCustomerModelProperty("parentorganizations")]
+        [SearchableCustomerProperty("parentorganizations")]
         public IList<string> Organizations { get; set; } = new List<string>();
-        [SearchableCustomerModelProperty]
+        [SearchableCustomerProperty]
         public IList<string> AssociatedOrganizations { get; set; } = new List<string>();
 
         public ICollection<DynamicObjectProperty> Properties { get; set; } = new List<DynamicObjectProperty>();
@@ -89,15 +89,15 @@ namespace VirtoCommerce.CustomerSegmentsModule.Core.Models
         {
             var result = new List<string>();
 
-            var properties = GetProperties().Where(x => x.IsHaveAttribute(typeof(SearchableCustomerModelPropertyAttribute)));
+            var properties = GetProperties().Where(x => x.IsHaveAttribute(typeof(SearchableCustomerPropertyAttribute)));
             foreach (var property in properties)
             {
                 var propertyValues = GetPropertyValues(property);
 
                 if (propertyValues.Any())
                 {
-                    var attribute = property.GetCustomAttributes<SearchableCustomerModelPropertyAttribute>().FirstOrDefault();
-                    var propertyName = !string.IsNullOrEmpty(attribute?.SearchableName) ? attribute.SearchableName : property.Name;
+                    var attribute = property.GetCustomAttributes<SearchableCustomerPropertyAttribute>().FirstOrDefault();
+                    var propertyName = !string.IsNullOrEmpty(attribute?.SearchablePropertyName) ? attribute.SearchablePropertyName : property.Name;
 
                     var queryPart = GetSearchQueryPart(propertyName, propertyValues);
                     result.Add(queryPart);
