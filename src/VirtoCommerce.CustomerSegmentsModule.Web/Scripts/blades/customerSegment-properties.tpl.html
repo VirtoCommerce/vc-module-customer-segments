@@ -6,8 +6,8 @@
                 <label class="form-label">
                     {{'customerSegments.blades.customer-segment-properties.all-properties' | translate}}
                 </label>
-                <a class="btn-ico fa fa-check-circle" ng-click="selectAll()"></a>
-                <a class="btn-ico fa fa-times-circle" ng-click="clearAll()"></a>
+                <a class="btn-ico remove" ng-click="clearAll()" ng-if="blade.selectedProperties.length">{{'platform.commands.remove-all'| translate}}</a>
+                <a class="btn-ico check" ng-click="selectAll()" ng-if="!blade.selectedProperties || blade.selectedProperties.length < blade.availableProperties.length">{{'platform.commands.add-all'| translate}}</a>
                 <ui-select multiple ng-model="blade.selectedProperties" on-select="sortSelected($item, $model)">
                     <ui-select-match placeholder="{{'customerSegments.blades.customer-segment-properties.select-properties' | translate}}">{{($item.title || $item.name) | translate}}</ui-select-match>
                     <ui-select-choices repeat="x in blade.availableProperties | orderBy: 'name' | filter: { name: $select.search } track by x.name">
